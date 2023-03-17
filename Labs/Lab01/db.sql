@@ -7,7 +7,7 @@ CREATE TABLE products (
   product_name VARCHAR(50) NOT NULL,
   price DECIMAL(10, 2) NOT NULL,
   description VARCHAR(255),
-  delivery_available BOOLEAN NOT NULL,
+  delivery_available BIT NOT NULL,
   delivery_options VARCHAR(255)
 );
 
