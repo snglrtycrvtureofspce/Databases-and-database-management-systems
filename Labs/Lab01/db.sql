@@ -1,6 +1,6 @@
-CREATE DATABASE wholesale_sales;
+CREATE DATABASE company;
 
-USE wholesale_sales;
+USE company;
 
 CREATE TABLE products (
   product_id INT PRIMARY KEY,
