@@ -2,55 +2,48 @@ CREATE DATABASE company;
 
 USE company;
 
+/* Создание таблиц БД */
+/* Товары */
 CREATE TABLE products (
   product_id INT IDENTITY(1,1) PRIMARY KEY,
-  product_name VARCHAR(50) NOT NULL,
+  product_name VARCHAR(50) NOT NULL UNIQUE,
   price DECIMAL(10, 2) NOT NULL,
-  description VARCHAR(255),
-  delivery_available BIT NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  delivery_available BIT NOT NULL CHECK (delivery_available IN (0,1))
 );
 
+/* Заказчики */
 CREATE TABLE customers (
   customer_id INT IDENTITY(1,1) PRIMARY KEY,
   customer_name VARCHAR(50) NOT NULL,
   address VARCHAR(100) NOT NULL,
-  phone VARCHAR(20) NOT NULL,
+  phone VARCHAR(20) NOT NULL UNIQUE,
   contact_person VARCHAR(50) NOT NULL
 );
 
+/* Доставка */
 CREATE TABLE delievery (
   delievery_id INT IDENTITY(1,1) PRIMARY KEY,
   price DECIMAL(10, 2) NOT NULL,
-  speed int NOT NULL,
+  speed int NOT NULL CHECK (speed > 0)
 );
 
+/* Заказы */
 CREATE TABLE orders (
   order_id INT IDENTITY(1,1) PRIMARY KEY,
   product_id INT NOT NULL,
   customer_id INT NOT NULL,
   delievery_id INT NOT NULL,
-  quantity INT NOT NULL,
+  quantity INT NOT NULL CHECK (quantity > 0),
   order_date DATE NOT NULL,
-  delivery_type VARCHAR(50),
-  delivery_cost DECIMAL(10, 2),
-  FOREIGN KEY (product_id) REFERENCES products(product_id),
-  FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
-  FOREIGN KEY (delievery_id) REFERENCES delievery(delievery_id)
+  delivery_type VARCHAR(50) NOT NULL,
+  delivery_cost DECIMAL(10, 2) NOT NULL,
+  FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (customer_id) REFERENCES customers(customer_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (delievery_id) REFERENCES delievery(delievery_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-INSERT INTO products (product_name, price, description, delivery_available)
-VALUES
-('Молоко', 80.00, 'Обезжиренное молоко', 1),
-('Кефир', 70.00, 'Нежирный кефир', 1),
-('Хлеб', 50.00, 'Ржаной хлеб', 1),
-('Сыр', 250.00, 'Краснодарский сыр', 1),
-('Яблоки', 120.00, 'Сорт "Антоновка"', 1),
-('Мандарины', 180.00, 'Сорт "Тангерин"', 1),
-('Картофель', 40.00, 'Новый урожай', 1),
-('Морковь', 30.00, 'Свежая морковь', 1),
-('Куриное филе', 200.00, 'Холодного копчения', 1),
-('Свинина', 300.00, 'Мясо свинины', 1);
-
+/* Вставка данных в таблицы БД */
 INSERT INTO customers (customer_name, address, phone, contact_person)
 VALUES
 ('Иванова Ольга', 'ул. Ленина, д.10, кв.5, Москва', '8 (916) 123-45-67', 'Петров Петр'),
