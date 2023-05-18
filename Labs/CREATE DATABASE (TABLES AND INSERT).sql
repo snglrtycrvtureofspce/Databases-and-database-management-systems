@@ -22,10 +22,10 @@ CREATE TABLE customers (
 );
 
 /* Доставка */
-CREATE TABLE delievery (
-  delievery_id INT IDENTITY(1,1) PRIMARY KEY,
+CREATE TABLE delivery (
+  delivery_id INT IDENTITY(1,1) PRIMARY KEY,
   price DECIMAL(10, 2) NOT NULL,
-  speed int NOT NULL CHECK (speed > 0)
+  speed INT NOT NULL CHECK (speed > 0)
 );
 
 /* Заказы */
@@ -33,14 +33,14 @@ CREATE TABLE orders (
   order_id INT IDENTITY(1,1) PRIMARY KEY,
   product_id INT NOT NULL,
   customer_id INT NOT NULL,
-  delievery_id INT NOT NULL,
+  delivery_id INT NOT NULL,
   quantity INT NOT NULL CHECK (quantity > 0),
   order_date DATE NOT NULL,
   delivery_type VARCHAR(50) NOT NULL,
   delivery_cost DECIMAL(10, 2) NOT NULL,
   FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (customer_id) REFERENCES customers(customer_id) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (delievery_id) REFERENCES delievery(delievery_id) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (delivery_id) REFERENCES delivery(delivery_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 /* Вставка данных в таблицы БД */
@@ -57,7 +57,7 @@ VALUES
 ('Михайлов Иван', 'ул. Гагарина, д.30, кв.11, Уфа', '8 (912) 456-78-90', 'Павлова Анастасия'),
 ('Кузьмина Татьяна', 'ул. Маяковского, д.18, кв.6, Омск', '8 (913) 987-65-43', 'Николаева Людмила');
 
-INSERT INTO delievery (price, speed)
+INSERT INTO delivery (price, speed)
 VALUES
 (500.00, 2),
 (1000.00, 1),
@@ -69,19 +69,6 @@ VALUES
 (1200.00, 1),
 (450.00, 3),
 (900.00, 2);
-
-INSERT INTO orders (product_id, customer_id, delievery_id, quantity, order_date, delivery_type, delivery_cost)
-VALUES
-(1, 3, 6, 3, '2023-03-22', 'Курьерская доставка', 350.00),
-(5, 8, 2, 2, '2023-03-23', 'Самовывоз', 0.00),
-(4, 4, 4, 1, '2023-03-21', 'Курьерская доставка', 700.00),
-(9, 5, 9, 4, '2023-03-20', 'Почтовая доставка', 450.00),
-(6, 9, 3, 1, '2023-03-19', 'Самовывоз', 0.00),
-(2, 6, 7, 2, '2023-03-18', 'Курьерская доставка', 800.00),
-(7, 1, 1, 5, '2023-03-17', 'Почтовая доставка', 1500.00),
-(8, 2, 10, 1, '2023-03-16', 'Курьерская доставка', 1200.00),
-(3, 7, 8, 3, '2023-03-15', 'Самовывоз', 0.00),
-(10, 10, 5, 2, '2023-03-14', 'Курьерская доставка', 900.00);
 
 INSERT INTO products (product_name, price, description, delivery_available)
 VALUES
@@ -95,3 +82,16 @@ VALUES
 ('Морковь', 30.00, 'Свежая морковь', 1),
 ('Куриное филе', 200.00, 'Холодного копчения', 1),
 ('Свинина', 300.00, 'Мясо свинины', 1);
+
+INSERT INTO orders (product_id, customer_id, delivery_id, quantity, order_date, delivery_type, delivery_cost)
+VALUES
+(1, 3, 6, 3, '2023-03-22', 'Курьерская доставка', 350.00),
+(5, 8, 2, 2, '2023-03-23', 'Самовывоз', 0.00),
+(4, 4, 4, 1, '2023-03-21', 'Курьерская доставка', 700.00),
+(9, 5, 9, 4, '2023-03-20', 'Почтовая доставка', 450.00),
+(6, 9, 3, 1, '2023-03-19', 'Самовывоз', 0.00),
+(2, 6, 7, 2, '2023-03-18', 'Курьерская доставка', 800.00),
+(7, 1, 1, 5, '2023-03-17', 'Почтовая доставка', 1500.00),
+(8, 2, 10, 1, '2023-03-16', 'Курьерская доставка', 1200.00),
+(3, 7, 8, 3, '2023-03-15', 'Самовывоз', 0.00),
+(10, 10, 5, 2, '2023-03-14', 'Курьерская доставка', 900.00);
