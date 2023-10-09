@@ -73,3 +73,82 @@ FROM orders o
 INNER JOIN products p ON o.product_id = p.product_id
 INNER JOIN customers c ON o.customer_id = c.customer_id
 INNER JOIN delivery d ON o.delivery_id = d.delivery_id;
+
+/* вычислит соимиость заказов */
+CREATE TRIGGER CalculateOrderCost
+ON orders
+AFTER INSERT
+AS
+BEGIN
+  UPDATE orders
+  SET delivery_cost =
+    (SELECT SUM(p.price * i.quantity)
+     FROM inserted i
+     INNER JOIN products p ON i.product_id = p.product_id)
+  FROM orders o
+  WHERE o.order_id IN (SELECT order_id FROM inserted);
+END;
+
+/* обновления стоимости заказа после вставки нового заказа */
+CREATE TRIGGER UpdateTotalPriceOnInsert
+ON orders
+AFTER INSERT
+AS
+BEGIN
+    UPDATE orders
+    SET delivery_cost = (SELECT price FROM delivery WHERE delivery_id = inserted.delivery_id) * inserted.quantity
+    FROM orders
+    INNER JOIN inserted ON orders.order_id = inserted.order_id;
+END;
+
+/* обновляет стоимость заказа при изменениии колво товаров */
+CREATE TRIGGER UpdateOrderCost
+ON orders
+AFTER UPDATE
+AS
+BEGIN
+  UPDATE orders
+  SET delivery_cost =
+    (SELECT SUM(p.price * i.quantity)
+     FROM inserted i
+     INNER JOIN products p ON i.product_id = p.product_id)
+  FROM orders o
+  WHERE o.order_id IN (SELECT order_id FROM inserted);
+END;
+
+/* удаляет заказчиков при удалении клиента */
+CREATE TRIGGER DeleteCustomerOrders
+ON customers
+AFTER DELETE
+AS
+BEGIN
+  DELETE FROM orders
+  WHERE customer_id IN (SELECT customer_id FROM deleted);
+END;
+
+/* обновления стоимости заказа после удаления */
+CREATE TRIGGER UpdateTotalPriceOnDelete
+ON orders
+AFTER DELETE
+AS
+BEGIN
+    UPDATE orders
+    SET delivery_cost = (SELECT price FROM delivery WHERE delivery_id = deleted.delivery_id) * deleted.quantity
+    FROM orders
+    INNER JOIN deleted ON orders.order_id = deleted.order_id;
+END;
+
+/* индивидуальное задание */
+DECLARE @x int
+DECLARE @y float
+SET @x = 10
+IF(@x < 1.45)
+	BEGIN
+		SET @y = (POWER(@x,3.5)) + TAN(2 * @x)
+		SELECT @x as Значение, @y as Результат
+	END
+ELSE IF(1.45 <= @x)
+	BEGIN
+		SET @y = (POWER(@x, 2) + POWER(exp(1), @x))
+		SELECT @x as Значение, @y as Результат
+	END
