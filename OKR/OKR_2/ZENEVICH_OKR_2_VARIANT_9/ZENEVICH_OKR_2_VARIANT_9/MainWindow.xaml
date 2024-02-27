@@ -1,0 +1,35 @@
+﻿<Window x:Class="ZENEVICH_OKR_2_VARIANT_9.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ZENEVICH_OKR_2_VARIANT_9"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+
+    <Grid>
+        <Menu>
+            <MenuItem Header="Запросы">
+                <MenuItem Header="Темп. плавл. > Плотность" Click="ShowTemperatureHigherDensity"/>
+                <MenuItem Header="Мин. уд. теплопроводность" Click="ShowMinThermalConductivity"/>
+                <MenuItem Header="Уд. теплопроводность в диапазоне" Click="ShowThermalConductivityInRange"/>
+            </MenuItem>
+        </Menu>
+
+        <DataGrid x:Name="dataGrid" AutoGenerateColumns="True" Margin="10,30,10,80" />
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <Button Content="Отчёт" Width="80" Height="30" Margin="5" Click="GenerateReport_Click"/>
+            <Button Content="Добавить" Width="80" Height="30" Margin="5" Click="AddButton_Click"/>
+            <Button Content="Сохранить" Width="80" Height="30" Margin="5" Click="SaveButton_Click"/>
+            <Button Content="Удалить" Width="80" Height="30" Margin="5" Click="DeleteButton_Click"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,336,0,0">
+            <TextBlock Text="Мин. уд. теплопроводность:" Margin="5"/>
+            <TextBox x:Name="minTextBox" Width="50" Margin="5"/>
+            <TextBlock Text="Макс. уд. теплопроводность:" Margin="5"/>
+            <TextBox x:Name="maxTextBox" Width="50" Margin="5"/>
+        </StackPanel>
+    </Grid>
+</Window>
